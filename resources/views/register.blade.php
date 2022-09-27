@@ -7,7 +7,7 @@
                 <h2 class="fs-1 fw-bold is-font text-white">สมัครสมาชิก</h2>
             </div>
             <form class="needs-validation" novalidate="">
-                <div class="row g-5 mb-3" style="background-color: rgba(255,255,255,.8)">
+                <div class="row mb-3 p-3" style="background-color: rgba(255,255,255,.8)">
                     <div class="col-md-12 col-lg-8">
                         <h4 class="mb-3">Billing address</h4>
                         <div class="row g-3">

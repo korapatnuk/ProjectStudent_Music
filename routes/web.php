@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AristController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
@@ -21,5 +22,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('register', [RegisterController::class, 'index'])->name('register');
+Route::get('contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
+Route::get('about-us', [HomeController::class, 'aboutUs'])->name('aboutUs');
+Route::get('arist', [AristController::class, 'arist'])->name('arist');
 Route::get('/{id}', [HomeController::class, 'detail'])->name('detail');
 Route::view('layout','layouts.index');
