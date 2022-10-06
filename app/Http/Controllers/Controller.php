@@ -10,4 +10,10 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function uploadFile($file, $des) {
+        $newName= now()->format("YmdHis"). $file->getClientOriginalName();
+        $file->storeAs($des, $newName);
+        return $newName;
+    }
 }

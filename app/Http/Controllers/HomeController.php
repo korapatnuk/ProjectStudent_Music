@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Arists;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index(Request $request) {
-        return view('index');
+        $arists = Arists::take(20)->get();
+        return view('index', compact('arists'));
     }
 
-    public function detail(Request $request, $id) {
-        return view('detail');
-    }
+  
 
     public function contactUs(Request $request) {
         return view('contact-us');

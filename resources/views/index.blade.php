@@ -9,9 +9,9 @@
         </div>
         <div class="col-lg-6 mx-auto">
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                <form class="row g-3">
+                <form class="row g-3" action="/arists" method="get">
                     <div class="col-auto">
-                        <input style="width: 338px;" type="text" class="form-control-lg" id="artis_name"
+                        <input style="width: 338px;" name="aname" type="text" class="form-control-lg" id="artis_name"
                             placeholder="ชื่อวงดนตรี/นักร้อง/นักดนตรี">
                     </div>
                     <div class="col-auto">
@@ -22,61 +22,26 @@
             </div>
         </div>
         <div>
-            <button type="button" class="btn btn-warning btn-lg px-4 gap-3">สร้างโปรไฟล์วงดนตรี</button>
+            <a href="{{ route('arist.register') }}" class="btn btn-warning btn-lg px-4 gap-3">สร้างโปรไฟล์วงดนตรี</a>
         </div>
     </div>
     <div class="container">
         <div class="fs-4 d-inline-block p-2 text-white" style="background-color: rgba(0,0,0,.6)">ยอดนิยม</div>
         <div class="fs-4 p-2 slide-container" style="background-color: rgba(0,0,0,.6)">
-            <div class="slide-item d-inline-block mx-1 ">
-                <div class="text-center">
-                    <img src="https://dummyimage.com/250" class="m-auto" alt="" srcset="">
+            @foreach ($arists as $k => $item)
+                <div class="slide-item d-inline-block mx-1 ">
+                    <div class="text-center">
+                        <a href="{{$item->link}}"><img src="{{$item->getImage}}" style="width:250px; height:250px; object-fit:cover"
+                            class="m-auto" alt="" srcset=""></a>
+                    </div>
+                    <div class="text-white text-center">
+                        {{$k == 0 ? "TOP" : $k}}
+                    </div>
+                    <a href="{{$item->link}}"><div class="text-white text-center">{{$item->aname}}</div></a>
                 </div>
-                <div class="text-white text-center">TOP</div>
-                <div class="text-white text-center">ANATOMY RABBIT</div>
-            </div>
-            <div class="slide-item d-inline-block mx-1">
-                <div class="text-center">
-                    <img src="https://dummyimage.com/250" class="m-auto" alt="" srcset="">
-                </div>
-                <div class="text-white text-center">1</div>
-                <div class="text-white text-center">ANATOMY RABBIT</div>
-            </div>
-            <div class="slide-item d-inline-block mx-1">
-                <div class="text-center">
-                    <img src="https://dummyimage.com/250" class="m-auto" alt="" srcset="">
-                </div>
-                <div class="text-white text-center">2</div>
-                <div class="text-white text-center">ANATOMY RABBIT</div>
-            </div>
-            <div class="slide-item d-inline-block mx-1">
-                <div class="text-center">
-                    <img src="https://dummyimage.com/250" class="m-auto" alt="" srcset="">
-                </div>
-                <div class="text-white text-center">3</div>
-                <div class="text-white text-center">ANATOMY RABBIT</div>
-            </div>
-            <div class="slide-item d-inline-block mx-1">
-                <div class="text-center">
-                    <img src="https://dummyimage.com/250" class="m-auto" alt="" srcset="">
-                </div>
-                <div class="text-white text-center">4</div>
-                <div class="text-white text-center">ANATOMY RABBIT</div>
-            </div>
-            <div class="slide-item d-inline-block mx-1">
-                <div class="text-center">
-                    <img src="https://dummyimage.com/250" class="m-auto" alt="" srcset="">
-                </div>
-                <div class="text-white text-center">5</div>
-                <div class="text-white text-center">ANATOMY RABBIT</div>
-            </div>
+            @endforeach
         </div>
     </div>
-
-
-
-
-
 @endsection
 
 @push('js')
