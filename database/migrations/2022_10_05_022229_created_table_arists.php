@@ -19,6 +19,7 @@ class CreatedTableArists extends Migration
             $table->text('details');
             $table->text('image_a');
             $table->integer('member_id')->unsigned();
+            $table->integer('flag')->default(1);
             $table->timestamps();
 
             // $table->foreign('member_id')->references('id')->on('tbl_member');

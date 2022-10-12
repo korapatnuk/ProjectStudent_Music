@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AristController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MemberController;
@@ -32,12 +33,27 @@ Route::post('register', [RegisterController::class, 'register'])->name('register
 
 Route::prefix('arists')->as('arist.')->group(function () {
     Route::get('/', [AristController::class, 'arist'])->name('index');
+    Route::get('/edit-profile', [AristController::class, 'editProfile'])->name('editProfile');
+    Route::post('/edit-profile', [AristController::class, 'editProfilePost'])->name('edit');
     Route::get('/{id}', [AristController::class, 'detail'])->name('detail');
+    Route::post('/edit-review/{id}', [AristController::class, 'editReview'])->name('detail');
+    Route::post('/{id}/review', [AristController::class, 'review'])->name('review');
     Route::post('/{id}/event', [AristController::class, 'storeEvent'])->name('event.store');
+    Route::get('/event/{status}/{id}', [AristController::class, 'updateEvent'])->name('event.update');
+    Route::get('/report/{id}', [AristController::class, 'report'])->name('report.store');
     Route::get('/{id}/add-video', [AristController::class, 'addVideo'])->name('addVideo');
+    Route::get('/{id}/remove-video', [AristController::class, 'removeVideo'])->name('removeVideo');
     Route::post('/{id}/add-video', [AristController::class, 'addVideoPost'])->name('addVideo.post');
     Route::get('arists/register', [AristController::class, 'register'])->name('register');
     Route::post('arists/register', [AristController::class, 'store'])->name('store');
+});
+
+Route::prefix('admin')->as('admin.')->group(function(){
+    Route::get('/login', [AdminController::class, 'login'])->name('login');
+    Route::post('/login', [AdminController::class, 'loginPost'])->name('login.post');
+    Route::get('/logout', [AdminController::class, 'logout'])->name('logout.post')->middleware('auth.admin');
+    Route::get('/', [AdminController::class, 'index'])->name('index')->middleware('auth.admin');
+    Route::get('/approve/{status}/{id}', [AdminController::class, 'approve'])->name('approve')->middleware('auth.admin');
 });
 
 Route::get('contact-us', [HomeController::class, 'contactUs'])->name('contactUs');

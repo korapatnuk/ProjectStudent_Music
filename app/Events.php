@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Events extends Model
 {
     protected $table= "tbl_events";
-
+    protected $with = ['member'];
     public function arist(){
         return $this->belongsTo(Arists::class, 'arists_id');
     }

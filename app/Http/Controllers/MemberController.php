@@ -24,6 +24,10 @@ class MemberController extends Controller
         }
 
         if (Hash::check($request->password, $model->password)) {
+            if($model->flag =='0') {
+            return back()->with('error_message', 'ไม่สามารถเข้าสู่ระบบได้เนื่องจากถูกร้องเรียนกรุณาติดต่อผู้ดูแลระบบ');
+
+            }
             auth()->login($model);
             return back()->with('message', 'ยินดีต้อนรับ');
         }
@@ -33,6 +37,9 @@ class MemberController extends Controller
 
     public function editProfile()
     {
+        if(!auth()->check()) {
+            return redirect('/');
+        }
         $provinces = Province::orderBy('name_th')->get();
 
         $auth = auth()->user();

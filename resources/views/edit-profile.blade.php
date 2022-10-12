@@ -131,7 +131,7 @@
                     </div>
                     <div class="col-lg-4">
                         <input class="form-control" type="file" name="image_p" accept="image/*" onchange="loadFile(event)">
-                        <img class="img-thumbnail mt-3" id="output"  src="{{$auth->getImage}}"/>
+                        <img class="img-thumbnail mt-3" id="output"  src="{{$item->getImage}}"/>
                         @if ($errors->first('image_p'))
                             <div class="invalid-feedback" style="display: inline-block">
                                 {{ $errors->first('image_p') }}
@@ -140,6 +140,7 @@
                         @if(count(auth()->user()->arist) > 0)
                         <div class="text-white text-center"><a href="/arists/{{ auth()->user()->arist->first()->id }}" class="btn btn-xs btn-info mt-2">ดูข้อมูลวงดนตรี</a></div>
                         @endif
+                        <div class="text-white text-center"><a href="/logout" class="btn btn-xs btn-info mt-2">ออกจากระบบ</a></div>
                     </div>
 
                     <button id="form-submit" class="mb-3 w-100 btn btn-warning btn-lg mt-3" type="submit">ยืนยัน</button>

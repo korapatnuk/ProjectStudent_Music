@@ -16,7 +16,7 @@ class CreatedTableEvents extends Migration
         Schema::create('tbl_events', function (Blueprint $table) {
             $table->id();
             $table->date('event_date');
-            $table->boolean('event_b');
+            $table->integer('event_b');
             $table->integer('arists_id')->unsigned();
 
             // $table->foreign('arists_id')->references('id')->on('tbl_arists');

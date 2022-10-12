@@ -18,6 +18,7 @@ class CreatedTableReports extends Migration
             $table->string('details_report', 100);
             $table->integer('arists_id')->unsigned();
             $table->integer('member_id')->unsigned();
+            $table->integer('flag')->default(0);
             
             // $table->foreign('arists_id')->references('id')->on('tbl_arists');
             // $table->foreign('member_id')->references('id')->on('tbl_members');

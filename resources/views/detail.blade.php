@@ -66,7 +66,8 @@
                 <div class="text-white text-center">{{ $item->aname }}</div>
                 @if (auth()->check())
                     @if (auth()->user()->id == $item->member_id)
-                        <div class="text-white text-center"><a href="#" class="btn btn-xs btn-info">แก้ไขข้อมูล</a>
+                        <div class="text-white text-center"><a href="{{ url('/arists/edit-profile') }}"
+                                class="btn btn-xs btn-info">แก้ไขข้อมูล</a>
                         </div>
                         <div class="text-white text-center mt-2"><a href="{{ route('logout') }}"
                                 class="btn btn-xs btn-info">ออกจากระบบ</a></div>
@@ -92,10 +93,76 @@
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
                             tabindex="0">
-                            {{ $item->details }}
+                            <pre>{!! $item->details !!}</pre>
                         </div>
                         <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
-                            tabindex="0">...</div>
+                            tabindex="0">
+                            <section class="m-1 text-center text-lg-start shadow-1-strong rounded">
+                                <div class="row d-flex justify-content-center gap-1">
+                                    @foreach ($reviews as $review)
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-body m-3">
+                                                    <div class="row">
+                                                        <div
+                                                            class="col-lg-4 d-flex justify-content-center align-items-center mb-4 mb-lg-0">
+                                                            <img src="{{ $review->member->getImage }}"
+                                                                class="rounded-circle img-fluid shadow-1"
+                                                                style="width:100px; height:100px;object-fit: cover" />
+                                                        </div>
+                                                        <div class="col-lg-8">
+                                                            <p class="text-muted fw-light mb-4">
+                                                                {{ $review->details_r }}
+                                                            </p>
+                                                            <p class="fw-bold lead mb-2">
+                                                                <strong>{{ $review->member->fname }}
+                                                                    {{ $review->member->lname }} </strong>
+                                                                @if (auth()->check())
+                                                                    @if (auth()->user()->id == $review->member_id)
+                                                                        <small><a
+                                                                                href="/arists/edit-review/{{ $review->id }}"
+                                                                                data-text="{{ $review->details_r }}"
+                                                                                data-type="{{ $review->type }}"
+                                                                                class="btn-edit-review">แก้ไข</a> | <a
+                                                                                href="?remove-review={{ $review->id }}">ลบ</a></small>
+                                                                    @endif
+                                                                @endif
+                                                            </p>
+                                                            <p class="fw-bold text-muted mb-0">
+                                                                {{ $review->type == 1 ? 'ชอบ' : 'ไม่ชอบ' }} </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                    @if (auth()->check())
+                                        <div class="col-md-12">
+                                            <form method="post" id="form-review"
+                                                action="{{ url('arists/' . $item->id . '/review') }}">
+                                                {{ csrf_field() }}
+                                                <div class="input-group mb-3">
+                                                    <input type="hidden" name="arists_id" value="{{ $item->id }}">
+                                                    <input type="hidden" name="member_id"
+                                                        value="{{ auth()->user()->id }}">
+                                                    <input type="text" name="details_r" class="form-control"
+                                                        style="width:280px" placeholder="รีวิว ..." aria-label="รีวิว ..."
+                                                        aria-describedby="button-addon2" />
+                                                    <select name="type" id="" class="form-control">
+                                                        <option value="1">ชอบ</option>
+                                                        <option value="2">ไม่ชอบ</option>
+                                                    </select>
+                                                    <button class="btn btn-outline-primary" type="submit"
+                                                        id="button-addon2" data-mdb-ripple-color="dark">
+                                                        ส่งรีวิว
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    @endif
+                                </div>
+                            </section>
+                        </div>
 
                     </div>
 
@@ -114,11 +181,17 @@
                             </div>
                             <div class="p-2 slide-container">
                                 @foreach ($item->videos as $v)
-                                    <div class="slide-item d-inline-block mx-1 ">
-                                        <iframe width="141" height="141" src="{{ $v->url_youtube }}" title=""
-                                            frameborder="0"
+                                    <div class="slide-item d-inline-block mx-1 text-center">
+                                        <iframe width="290" height="255" src="{{ $v->url_youtube }}"
+                                            title="" frameborder="0"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                             allowfullscreen></iframe>
+                                        @if (auth()->check())
+                                            @if (auth()->user()->id == $item->member_id)
+                                                <a href="{{ url('/arists/' . $v->id . '/remove-video') }}"
+                                                    class="btn btn-danger remove-clip">ลบ</a>
+                                            @endif
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
@@ -131,6 +204,7 @@
                 @if (auth()->check())
                     @if ($item->member_id != auth()->user()->id)
                         <a href="#" id="event_action" class="btn btn-primary mt-3" style="margin:auto">จอง</a>
+                        <a href="#" id="sus_action" class="btn btn-danger mt-3" style="margin:auto">ร้องเรียน</a>
                     @endif
                 @endif
             </div>
@@ -142,6 +216,7 @@
 @push('js')
     <script src="/plugins/calendar/main.js"></script>
     <script>
+        var events = {!! $events !!};
         var date_event_select = null;
         $(function() {
 
@@ -163,13 +238,16 @@
                         Swal.showLoading();
                         $.ajax({
                                 method: "POST",
-                                url: "{{url('arists/'. $item->id . '/event')}}",
+                                url: "{{ url('arists/' . $item->id . '/event') }}",
                                 data: {
                                     event_date: date_event_select.dateStr
                                 }
                             })
                             .done(function(msg) {
-                                Swal.fire('แจ้งเตือน','ทำรายการเรียบร้อยแล้ว', 'success')
+                                Swal.fire('แจ้งเตือน', 'ทำรายการเรียบร้อยแล้ว', 'success')
+                                console.log(msg)
+                                events = msg
+                                calendar.addEvent(msg)
                                 Swal.hideLoading();
                             });
                     }
@@ -177,7 +255,7 @@
             })
             $('.slide-container').slick({
                 infinite: true,
-                slidesToShow: 4,
+                slidesToShow: 2,
                 slidesToScroll: 1,
                 responsive: [{
                         breakpoint: 1024,
@@ -214,10 +292,11 @@
     </script>
 
     <script>
+        var calendar;
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            calendar = new FullCalendar.Calendar(calendarEl, {
                 // height: '100%',
                 expandRows: true,
                 slotMinTime: '08:00',
@@ -226,6 +305,32 @@
                     console.log(info)
                     date_event_select = info
                 },
+                @if (auth()->check())
+                    @if ($item->member_id == auth()->user()->id)
+                        eventClick: function(info) {
+                            console.log(info, info.event.id)
+                            Swal.fire({
+                                title: 'ท่านต้องการอนุมัติการจองนี้หรือไม่',
+                                showDenyButton: true,
+                                showCancelButton: true,
+                                confirmButtonText: 'จองได้',
+                                denyButtonText: `จองไม่ได้`,
+                                cancelButtonText: `ยกเลิก`,
+                            }).then((result) => {
+                                /* Read more about isConfirmed, isDenied below */
+                                if (result.isConfirmed) {
+                                    location.href = "/arists/event/2/" + info.event
+                                        .extendedProps.id
+                                } else if (result.isDenied) {
+                                    location.href = "/arists/event/1/" + info.event
+                                        .extendedProps.id
+                                }
+                            })
+                            // change the border color just for fun
+                            info.el.style.borderColor = 'red';
+                        },
+                    @endif
+                @endif
                 locale: 'th-TH',
                 headerToolbar: {
                     left: 'prev,next',
@@ -233,70 +338,70 @@
                     right: 'dayGridMonth'
                 },
                 initialView: 'dayGridMonth',
-                // navLinks: true, // can click day/week names to navigate views
+                navLinks: false, // can click day/week names to navigate views
                 // editable: true,
                 selectable: true,
                 nowIndicator: true,
-                dayMaxEvents: true, // allow "more" link when too many events
-                events: [
-                    //   {
-                    //     title: 'All Day Event',
-                    //     start: '2020-09-01',
-                    //   },
-                    //   {
-                    //     title: 'Long Event',
-                    //     start: '2020-09-07',
-                    //     end: '2020-09-10'
-                    //   },
-                    //   {
-                    //     groupId: 999,
-                    //     title: 'Repeating Event',
-                    //     start: '2020-09-09T16:00:00'
-                    //   },
-                    //   {
-                    //     groupId: 999,
-                    //     title: 'Repeating Event',
-                    //     start: '2020-09-16T16:00:00'
-                    //   },
-                    //   {
-                    //     title: 'Conference',
-                    //     start: '2020-09-11',
-                    //     end: '2020-09-13'
-                    //   },
-                    //   {
-                    //     title: 'Meeting',
-                    //     start: '2020-09-12T10:30:00',
-                    //     end: '2020-09-12T12:30:00'
-                    //   },
-                    //   {
-                    //     title: 'Lunch',
-                    //     start: '2020-09-12T12:00:00'
-                    //   },
-                    //   {
-                    //     title: 'Meeting',
-                    //     start: '2020-09-12T14:30:00'
-                    //   },
-                    //   {
-                    //     title: 'Happy Hour',
-                    //     start: '2020-09-12T17:30:00'
-                    //   },
-                    //   {
-                    //     title: 'Dinner',
-                    //     start: '2020-09-12T20:00:00'
-                    //   },
-                    //   {
-                    //     title: 'Birthday Party',
-                    //     start: '2020-09-13T07:00:00'
-                    //   },
-                    //   {
-                    //     title: 'Click for Google',
-                    //     url: 'http://google.com/',
-                    //     start: '2020-09-28'
-                    //   }
-                ]
+                dayMaxEvents: false, // allow "more" link when too many events
+                events: events
+
+
             });
 
             calendar.render();
         });
+    </script>
+    <script>
+        $(function() {
+            $(document).on('click', '.btn-edit-review', function(e) {
+                e.preventDefault();
+                var el = $(this)
+                $('#form-review').attr('action', el.attr('href'))
+                $('input[name="details_r"]').val(el.attr('data-text'))
+                $('select[name="type"]').val(el.attr('data-type'))
+            })
+
+            $(document).on('click', '#sus_action', function(e) {
+                e.preventDefault();
+                var el = $(this)
+                Swal.fire({
+                    title: 'ส่งข้อมูลร้องเรียน',
+                    input: 'text',
+                    inputAttributes: {
+                        autocapitalize: 'off'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'ส่งข้อมูล',
+                    showLoaderOnConfirm: true,
+                    preConfirm: function(text) {
+                        return $.ajax({
+                            url:'/arists/report/'+ {{$item->id}},
+                            data:{text:text}
+                        })
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then(function(result){
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: `ทำรายการเรียบร้อยแล้ว`,
+                        })
+                    }
+                })
+            })
+            $(document).on('click', '.remove-clip', function(e) {
+                var el = $(this);
+                e.preventDefault();
+                Swal.fire({
+                    title: 'ต้องการลบรายการนี้หรือไม่?',
+                    showCancelButton: true,
+                    confirmButtonText: 'ตกลง',
+                    cancelButtonText: 'ยกเลิก',
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        location.href = el.attr('href');
+                    }
+                })
+            })
+        })
     </script>
 @endpush

@@ -25,6 +25,7 @@ class CreatedTableMember extends Migration
             $table->string('address', 50);
             $table->string('county', 50);
             $table->string('image_p', 255);
+            $table->integer('flag')->default(1);
             $table->timestamps();
         });
     }

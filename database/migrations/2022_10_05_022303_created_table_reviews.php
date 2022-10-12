@@ -16,6 +16,7 @@ class CreatedTableReviews extends Migration
         Schema::create('tbl_reviews', function (Blueprint $table) {
             $table->id();
             $table->text('details_r');
+            $table->integer('type');
             $table->integer('arists_id')->unsigned();
             $table->integer('member_id')->unsigned();
             

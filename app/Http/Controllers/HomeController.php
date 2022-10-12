@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function index(Request $request) {
-        $arists = Arists::take(20)->get();
+        $arists = Arists::where('flag', 1)->take(20)->get();
         return view('index', compact('arists'));
     }
 

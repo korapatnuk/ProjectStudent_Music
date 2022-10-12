@@ -1,6 +1,8 @@
 <?php
 
+use App\Admin;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class AdminSeeder extends Seeder
 {
@@ -11,6 +13,6 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Admin::insert(['admin_name' => 'admin', 'admin_password' => Hash::make('welcome'), 'created_at'=>now()]);
     }
 }
