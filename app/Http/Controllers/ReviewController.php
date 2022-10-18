@@ -12,9 +12,14 @@ class ReviewController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function remove($id)
     {
-        //
+        $review = Review::findOrFail($id);
+        if($review->member_id == auth()->user()->id){
+            $review->delete();
+            return back()->with('message', 'ทำรายการเรียบร้อยแล้ว');
+        }
+        return redirect('/');
     }
 
     /**

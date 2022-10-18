@@ -5,6 +5,7 @@ use App\Http\Controllers\AristController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,6 +32,8 @@ Route::get('edit-profile', [MemberController::class, 'editProfile'])->name('edit
 Route::post('edit-profile', [MemberController::class, 'editProfilePost'])->name('edit-profile.post');
 Route::post('register', [RegisterController::class, 'register'])->name('register.post');
 
+Route::get('/remove-review/{id}', [ReviewController::class, 'remove'])->name('remove');
+
 Route::prefix('arists')->as('arist.')->group(function () {
     Route::get('/', [AristController::class, 'arist'])->name('index');
     Route::get('/edit-profile', [AristController::class, 'editProfile'])->name('editProfile');
@@ -40,6 +43,7 @@ Route::prefix('arists')->as('arist.')->group(function () {
     Route::post('/{id}/review', [AristController::class, 'review'])->name('review');
     Route::post('/{id}/event', [AristController::class, 'storeEvent'])->name('event.store');
     Route::get('/event/{status}/{id}', [AristController::class, 'updateEvent'])->name('event.update');
+    Route::get('/event-cancel/{id}', [AristController::class, 'cancelEvent'])->name('event.cancel');
     Route::get('/report/{id}', [AristController::class, 'report'])->name('report.store');
     Route::get('/{id}/add-video', [AristController::class, 'addVideo'])->name('addVideo');
     Route::get('/{id}/remove-video', [AristController::class, 'removeVideo'])->name('removeVideo');

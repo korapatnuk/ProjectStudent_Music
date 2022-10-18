@@ -28,9 +28,14 @@ class Arists extends Model
         return url('/arists/'. $this->id);
     }
     public function getGetImageAttribute() {
-        $image = Storage::get('/image_arist/'.$this->image_a);
-        $type = pathinfo($this->image_a, PATHINFO_EXTENSION);
-        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($image);
-        return $base64;
+        try {
+            $image = Storage::get('/image_arist/'.$this->image_a);
+            $type = pathinfo($this->image_a, PATHINFO_EXTENSION);
+            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($image);
+            return $base64;
+        } catch (\Throwable $th) {
+            return '';
+        }
+       
     }
 }

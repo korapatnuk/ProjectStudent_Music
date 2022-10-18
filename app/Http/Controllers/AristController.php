@@ -26,7 +26,15 @@ class AristController extends Controller
 
         return view('arist.arist', compact('style'));
     }
+    public function cancelEvent($id) {
+        $event = Events::findOrFail($id);
 
+        if($event->member_id == auth()->user()->id) {
+            $event->delete();
+            return back()->with('message', 'ทำรายการเรียบร้อยแล้ว');
+        }
+        return redirect('/');
+    }
     public function report($id, Request $request) {
         Report::insert(['details_report' => $request->text, 'arists_id'=> $id, 'member_id' => auth()->user()->id]);
         return true;

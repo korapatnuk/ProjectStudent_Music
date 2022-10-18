@@ -23,9 +23,14 @@ class Member extends Authenticatable
     }
 
     public function getGetImageAttribute() {
-        $image = Storage::get('/image_members/'.$this->image_p);
-        $type = pathinfo($this->image_p, PATHINFO_EXTENSION);
-        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($image);
-        return $base64;
+        try {
+            $image = Storage::get('/image_members/'.$this->image_p);
+            $type = pathinfo($this->image_p, PATHINFO_EXTENSION);
+            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($image);
+            return $base64;
+        } catch (\Throwable $th) {
+            return '';
+        }
+        
     }
 }

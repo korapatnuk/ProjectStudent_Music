@@ -124,7 +124,8 @@
                                                                                 data-text="{{ $review->details_r }}"
                                                                                 data-type="{{ $review->type }}"
                                                                                 class="btn-edit-review">แก้ไข</a> | <a
-                                                                                href="?remove-review={{ $review->id }}">ลบ</a></small>
+                                                                                href="/remove-review/{{ $review->id }}"
+                                                                                class="btn-remove-review">ลบ</a></small>
                                                                     @endif
                                                                 @endif
                                                             </p>
@@ -305,32 +306,46 @@
                     console.log(info)
                     date_event_select = info
                 },
-                @if (auth()->check())
-                    @if ($item->member_id == auth()->user()->id)
-                        eventClick: function(info) {
-                            console.log(info, info.event.id)
-                            Swal.fire({
-                                title: 'ท่านต้องการอนุมัติการจองนี้หรือไม่',
-                                showDenyButton: true,
-                                showCancelButton: true,
-                                confirmButtonText: 'จองได้',
-                                denyButtonText: `จองไม่ได้`,
-                                cancelButtonText: `ยกเลิก`,
-                            }).then((result) => {
-                                /* Read more about isConfirmed, isDenied below */
-                                if (result.isConfirmed) {
-                                    location.href = "/arists/event/2/" + info.event
-                                        .extendedProps.id
-                                } else if (result.isDenied) {
-                                    location.href = "/arists/event/1/" + info.event
-                                        .extendedProps.id
-                                }
-                            })
-                            // change the border color just for fun
-                            info.el.style.borderColor = 'red';
-                        },
-                    @endif
-                @endif
+                eventClick: function(info) {
+                    console.log(info, info.event.extendedProps)
+                    if (info.event.extendedProps.arist.member_id == "{{ auth()->user()->id }}") {
+                        Swal.fire({
+                            title: 'ท่านต้องการอนุมัติการจองนี้หรือไม่',
+                            showDenyButton: true,
+                            showCancelButton: true,
+                            confirmButtonText: 'จองได้',
+                            denyButtonText: `จองไม่ได้`,
+                            cancelButtonText: `ยกเลิก`,
+                        }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.isConfirmed) {
+                                location.href = "/arists/event/2/" + info.event
+                                    .extendedProps.id
+                            } else if (result.isDenied) {
+                                location.href = "/arists/event/1/" + info.event
+                                    .extendedProps.id
+                            }
+                        })
+                        // change the border color just for fun
+                        info.el.style.borderColor = 'red';
+                    }
+
+                    if(info.event.extendedProps.member_id == '{{ auth()->user()->id }}') {
+                        Swal.fire({
+                            title: 'ท่านต้องการยกเลิกการจองของท่านหรือไม่ ?',
+                            showCancelButton: true,
+                            confirmButtonText: 'ยกเลิกการจอง',
+                            cancelButtonText: `ไม่ยกเลิก`,
+                        }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.isConfirmed) {
+                                location.href = "/arists/event-cancel/" + info.event
+                                    .extendedProps.id
+                            } 
+                        })
+                    } 
+
+                },
                 locale: 'th-TH',
                 headerToolbar: {
                     left: 'prev,next',
@@ -353,6 +368,20 @@
     </script>
     <script>
         $(function() {
+            $(document).on('click', '.btn-remove-review', function(e) {
+                e.preventDefault();
+                var el = $(this);
+                Swal.fire({
+                    title: 'ต้องการลบรายการนี้หรือไม่?',
+                    showCancelButton: true,
+                    confirmButtonText: 'ตกลง',
+                    cancelButtonText: 'ยกเลิก',
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        location.href = el.attr('href');
+                    }
+                })
+            })
             $(document).on('click', '.btn-edit-review', function(e) {
                 e.preventDefault();
                 var el = $(this)
@@ -375,12 +404,14 @@
                     showLoaderOnConfirm: true,
                     preConfirm: function(text) {
                         return $.ajax({
-                            url:'/arists/report/'+ {{$item->id}},
-                            data:{text:text}
+                            url: '/arists/report/' + {{ $item->id }},
+                            data: {
+                                text: text
+                            }
                         })
                     },
                     allowOutsideClick: () => !Swal.isLoading()
-                }).then(function(result){
+                }).then(function(result) {
                     if (result.isConfirmed) {
                         Swal.fire({
                             title: `ทำรายการเรียบร้อยแล้ว`,
