@@ -308,7 +308,7 @@
                 },
                 eventClick: function(info) {
                     console.log(info, info.event.extendedProps)
-                    if (info.event.extendedProps.arist.member_id == "{{ auth()->user()->id }}") {
+                    if (info.event.extendedProps.arist.member_id == "{{ auth()->check() ? auth()->user()->id : '-1' }}") {
                         Swal.fire({
                             title: 'ท่านต้องการอนุมัติการจองนี้หรือไม่',
                             showDenyButton: true,
@@ -330,7 +330,7 @@
                         info.el.style.borderColor = 'red';
                     }
 
-                    if(info.event.extendedProps.member_id == '{{ auth()->user()->id }}') {
+                    if(info.event.extendedProps.member_id == '{{ auth()->check() ? auth()->user()->id : '-1' }}') {
                         Swal.fire({
                             title: 'ท่านต้องการยกเลิกการจองของท่านหรือไม่ ?',
                             showCancelButton: true,
