@@ -19,6 +19,9 @@
             </div>
         </div>
     </div>
+    @php 
+    $hasArist = false;
+    @endphp
     @foreach ($style as $item)
     @if(count($item->arist) == 0)
     @continue
@@ -37,7 +40,17 @@
             @endforeach
         </div>
     </div>
+    @php
+    $hasArist = true;
+    @endphp
+
     @endforeach
+    @if($hasArist === false)
+    <div class="container my-2">
+        <div class="fs-4 d-inline-block p-2 text-white" style="background-color: rgba(0,0,0,.6)">ไม่พบวงดนตรีที่ต้องการค้นหา</div>
+        
+    </div>
+    @endif
 @endsection
 
 @push('js')

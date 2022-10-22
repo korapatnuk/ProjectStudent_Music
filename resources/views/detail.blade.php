@@ -202,12 +202,20 @@
             </div>
             <div class="col-lg-3">
                 <div id="calendar"></div>
+                
                 @if (auth()->check())
                     @if ($item->member_id != auth()->user()->id)
+                    <div>
                         <a href="#" id="event_action" class="btn btn-primary mt-3" style="margin:auto">จอง</a>
                         <a href="#" id="sus_action" class="btn btn-danger mt-3" style="margin:auto">ร้องเรียน</a>
+                    </div>
                     @endif
                 @endif
+                <div style="font-size:11px; margin-top:3px;color:white">
+                    สีแดง หมายถึง จองรอวงดนตรียอมรับการจอง
+                    <br>
+                    สีเขียว หมายถึง จองเรียบร้อยวงดนตรียอมรับการจอง
+                </div>
             </div>
         </div>
 

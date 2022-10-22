@@ -70,7 +70,7 @@
                             </div>
                             <div class="col-12">
                                 <label for="phone" class="form-label">เบอร์โทรศัพท์ </label>
-                                <input value="{{ old('phone') }}" name="phone" type="text" class="form-control"
+                                <input value="{{ old('phone') }}" name="phone" maxlength="10" type="text" class="form-control"
                                     id="phone" placeholder="เบอร์โทรศัพท์">
                                 @if ($errors->first('phone'))
                                     <div class="invalid-feedback" style="display: inline-block">

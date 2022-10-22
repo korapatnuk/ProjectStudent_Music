@@ -24,6 +24,8 @@ class SeedTypeMusic extends Seeder
             ['name' => 'อิเล็กทรอนิกส์', 'active' => 1],
             ['name' => 'เทคโน', 'active' => 1],
             ['name' => 'อะแคปเปลลา', 'active' => 1],
+            ['name' => 'ลูกทุ่ง', 'active' => 1],
+            ['name' => 'วาไรตี้', 'active' => 1],
         ];
         $model = new TypeMusic();
         $model->insert($inputs);

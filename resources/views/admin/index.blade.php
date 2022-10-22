@@ -52,9 +52,9 @@
         <table class="table align-middle mb-3 bg-white">
             <thead class="bg-light">
                 <tr>
-                    <th>Arist</th>
+                    <th>วงดนตรี</th>
                     <th>รายละเอียด</th>
-                    <th>Actions</th>
+                    <th>เห็นด้วย/ไม่เห็นด้วย</th>
                 </tr>
             </thead>
             <tbody>

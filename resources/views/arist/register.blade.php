@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-12">
-                                <label for="style" class="form-label">Style</label>
+                                <label for="style" class="form-label">แนวเพลง</label>
                                 <select class="form-select" id="style" name="style">
                                     <option value="">เลือกรูปแบบนตรี</option>
                                     @foreach($style as $item)
