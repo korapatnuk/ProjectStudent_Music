@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model
 {
     protected $table= "tbl_reports";
-    protected $with = ['arist', 'member'];
+    protected $with = ['member'];
     public function arist(){
         return $this->belongsTo(Arists::class, 'arists_id');
     }

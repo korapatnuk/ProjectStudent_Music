@@ -13,7 +13,9 @@ class Arists extends Model
     public function member(){
         return $this->belongsTo(Member::class, 'member_id');
     }
-
+    public function reports(){
+        return $this->hasMany(Report::class, 'arists_id');
+    }
     public function styleObj(){
         return $this->belongsTo(TypeMusic::class, 'style');
     }

@@ -38,13 +38,21 @@ class AdminController extends Controller
     }
 
     public function approve($status, $id) {
-        $report = Report::findOrFail($id);
-        $arist = $report->arist;
-        $member = $report->arist->member;
-        $member->flag = $status == '1' ? '0' : '1';
-        $arist->flag = $status == '1' ? '0' : '1';
-        $member->save();
-        $arist->save();
+        $report = Report::with(['arist'=>function($q) {
+            $q->with(['reports' => function($c) {
+                $c->where('flag', 1);
+            }]);
+        }])->findOrFail($id);
+        
+        if($report->arist->reports->count() >= 3) {
+            $arist = $report->arist;
+            $member = $report->arist->member;
+            $member->flag = $status == '1' ? '0' : '1';
+            $arist->flag = $status == '1' ? '0' : '1';
+            $member->save();
+            $arist->save();  
+        }
+           
         $report->flag=$status;
         $report->save();
         return back()->with('message', 'ทำรายการเรียบร้อยแล้ว');
@@ -56,7 +64,11 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $reports = Report::orderBy('id', 'desc')->paginate(20);
+        $reports = Report::with(['arist'=>function($q) {
+            $q->with(['reports' => function($c) {
+                $c->where('flag', 1);
+            }]);
+        }])->orderBy('id', 'desc')->paginate(20);
         return view('admin.index', compact('reports'));
     }
 

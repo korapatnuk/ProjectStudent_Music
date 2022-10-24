@@ -78,11 +78,11 @@
 
                         <td>
                             @if ($report->flag == '0')
-                                <a href="/admin/approve/1/{{ $report->arists_id }}"
+                                <a data-num="{{ $report->arist->reports->count() }}" href="/admin/approve/1/{{ $report->id }}"
                                     class="btn confirm btn-link btn-sm btn-rounded">
                                     เห็นด้วย
                                 </a>
-                                <a href="/admin/approve/2/{{ $report->arists_id }}"
+                                <a href="/admin/approve/2/{{ $report->id }}"
                                     class="btn confirm btn-link btn-sm btn-rounded">
                                     ไม่เห็นด้วย
                                 </a>
@@ -131,10 +131,11 @@
             @endif
 
             $(document).on('click', '.confirm', function(e) {
+                var num = $(this).attr('data-num')
                 e.preventDefault();
                 var el = $(this);
                 Swal.fire({
-                    title: 'ท่านต้องการทำรายการต่อหรือไม่?',
+                    title: 'ท่านต้องการทำรายการต่อหรือไม่? ผู้ถูกร้องเรียนโดนร้องเรียนแล้ว '+ num + ' ครั้ง หากครบ 3 ครั้งจะโดนระงับการใช้งาน',
                     showCancelButton: true,
                     confirmButtonText: 'ตกลง',
                     cancelButtonText: 'ยกเลิก',

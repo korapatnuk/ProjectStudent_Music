@@ -32,15 +32,15 @@
                                 <h3 class="mb-5">Admin Login</h3>
 
                                 <div class="form-outline mb-4">
+                                    <label class="form-label" for="typeEmailX-2">Username</label>
                                     <input type="text" name="username" id="typeEmailX-2"
                                         class="form-control form-control-lg" />
-                                    <label class="form-label" for="typeEmailX-2">Username</label>
                                 </div>
 
                                 <div class="form-outline mb-4">
+                                    <label class="form-label" for="typePasswordX-2">Password</label>
                                     <input type="password" name="password" id="typePasswordX-2"
                                         class="form-control form-control-lg" />
-                                    <label class="form-label" for="typePasswordX-2">Password</label>
                                 </div>
 
                               

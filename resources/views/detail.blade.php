@@ -330,7 +330,7 @@
                                 location.href = "/arists/event/2/" + info.event
                                     .extendedProps.id
                             } else if (result.isDenied) {
-                                location.href = "/arists/event/1/" + info.event
+                                location.href = "/arists/event/3/" + info.event
                                     .extendedProps.id
                             }
                         })

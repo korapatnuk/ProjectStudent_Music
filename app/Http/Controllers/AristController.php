@@ -104,9 +104,11 @@ class AristController extends Controller
             $result['id'] = $i->id;
             $result['extendedProps'] = $i;
             if($i->event_b == 1) {
-                $result['color'] = 'red';
-            } else {
+                $result['color'] = 'oragne';
+            } elseif($i->event_b == 2) {
                 $result['color'] = 'green';
+            } else {
+                $result['color'] = 'red';
             }
             $result['title'] = $i->member->fname . ' ' . $i->member->lname;
             return $result;
@@ -161,7 +163,7 @@ class AristController extends Controller
         $inputs['created_at'] = now();
         // dd($inputs);
         Events::insert($inputs);
-        $result['color'] = 'red';
+        $result['color'] = 'oragne';
         $result['start'] = $inputs['event_date'];
         // $result['display'] = 'background';
         $result['title'] = auth()->user()->fname . ' ' . auth()->user()->lname;
